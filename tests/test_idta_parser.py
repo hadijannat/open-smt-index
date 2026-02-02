@@ -1,6 +1,5 @@
 """Tests for IDTA HTML parsing."""
 
-
 from smt_index.sources.idta import (
     _extract_links,
     _extract_status,

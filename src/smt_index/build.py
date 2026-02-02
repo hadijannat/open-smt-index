@@ -95,19 +95,21 @@ def _write_csv(index: TemplateIndex, path: Path) -> None:
         writer = csv.writer(f)
 
         # Header
-        writer.writerow([
-            "template_id",
-            "template_name",
-            "idta_number",
-            "status",
-            "version",
-            "is_latest",
-            "pdf_link",
-            "github_link",
-            "github_area",
-            "github_repo_path",
-            "github_versions",
-        ])
+        writer.writerow(
+            [
+                "template_id",
+                "template_name",
+                "idta_number",
+                "status",
+                "version",
+                "is_latest",
+                "pdf_link",
+                "github_link",
+                "github_area",
+                "github_repo_path",
+                "github_versions",
+            ]
+        )
 
         # Rows
         for template in index.templates:
@@ -119,38 +121,40 @@ def _write_csv(index: TemplateIndex, path: Path) -> None:
                     if version.github:
                         gh_area = version.github[0].area
                         gh_path = version.github[0].repo_path
-                    gh_versions = ";".join(
-                        [f"{g.area}:{g.repo_path}" for g in version.github]
-                    )
+                    gh_versions = ";".join([f"{g.area}:{g.repo_path}" for g in version.github])
 
-                    writer.writerow([
+                    writer.writerow(
+                        [
+                            template.id,
+                            template.name,
+                            template.idta_number or "",
+                            template.status,
+                            version.version,
+                            version.is_latest,
+                            version.links.pdf or "",
+                            version.links.github or "",
+                            gh_area,
+                            gh_path,
+                            gh_versions,
+                        ]
+                    )
+            else:
+                # Template with no versions
+                writer.writerow(
+                    [
                         template.id,
                         template.name,
                         template.idta_number or "",
                         template.status,
-                        version.version,
-                        version.is_latest,
-                        version.links.pdf or "",
-                        version.links.github or "",
-                        gh_area,
-                        gh_path,
-                        gh_versions,
-                    ])
-            else:
-                # Template with no versions
-                writer.writerow([
-                    template.id,
-                    template.name,
-                    template.idta_number or "",
-                    template.status,
-                    "",  # version
-                    "",  # is_latest
-                    "",  # pdf_link
-                    "",  # github_link
-                    "",  # github_area
-                    "",  # github_repo_path
-                    "",  # github_versions
-                ])
+                        "",  # version
+                        "",  # is_latest
+                        "",  # pdf_link
+                        "",  # github_link
+                        "",  # github_area
+                        "",  # github_repo_path
+                        "",  # github_versions
+                    ]
+                )
 
 
 def run_build(output_dir: Path, use_playwright: bool = True) -> TemplateIndex:

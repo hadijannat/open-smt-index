@@ -1,6 +1,5 @@
 """Tests for semver parsing and version utilities."""
 
-
 from smt_index.util import SemVer, sort_versions
 
 

@@ -48,9 +48,7 @@ def merge_sources(
         primary = next((t for t in idta_group if t.idta_number), idta_group[0])
 
         # Try to find matching GitHub entries (using primary IDTA entry)
-        github_matches = _find_github_matches(
-            primary, github_by_slug, github_by_url_prefix
-        )
+        github_matches = _find_github_matches(primary, github_by_slug, github_by_url_prefix)
 
         if github_matches:
             matched_github_slugs.add(github_matches[0].slug)
