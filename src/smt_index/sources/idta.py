@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass, field
 
 import httpx
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, NavigableString, Tag
 from rich.console import Console
 
 from smt_index.models import TemplateStatus
@@ -12,7 +12,10 @@ from smt_index.util import extract_idta_number, slugify
 
 console = Console()
 
-IDTA_URL = "https://industrialdigitaltwin.org/content-hub/teilmodelle"
+IDTA_URLS = [
+    "https://industrialdigitaltwin.org/content-hub/teilmodelle",
+    "https://industrialdigitaltwin.org/en/content-hub/submodels",
+]
 
 
 @dataclass
@@ -36,34 +39,35 @@ class IDTATemplate:
             self.id = f"ext-{self.slug}"
 
 
-async def fetch_idta_html(use_playwright: bool = False) -> str:
+async def fetch_idta_html(url: str, use_playwright: bool = False) -> str:
     """Fetch the IDTA Content Hub HTML.
 
     Args:
+        url: URL to fetch
         use_playwright: If True, use Playwright for JS-rendered content.
     """
     if use_playwright:
-        return await _fetch_with_playwright()
+        return await _fetch_with_playwright(url)
     else:
-        return await _fetch_with_httpx()
+        return await _fetch_with_httpx(url)
 
 
-async def _fetch_with_httpx() -> str:
+async def _fetch_with_httpx(url: str) -> str:
     """Fetch using httpx (faster, but may miss JS-rendered content)."""
     async with httpx.AsyncClient(follow_redirects=True, timeout=30.0) as client:
-        response = await client.get(IDTA_URL)
+        response = await client.get(url)
         response.raise_for_status()
         return response.text
 
 
-async def _fetch_with_playwright() -> str:
+async def _fetch_with_playwright(url: str) -> str:
     """Fetch using Playwright for JS-rendered content."""
     from playwright.async_api import async_playwright
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
-        await page.goto(IDTA_URL, wait_until="networkidle")
+        await page.goto(url, wait_until="networkidle")
         # Wait for content to render
         await page.wait_for_timeout(2000)
         content = await page.content()
@@ -90,55 +94,60 @@ def parse_idta_html(html: str) -> list[IDTATemplate]:
         if template:
             templates.append(template)
 
+    if not templates:
+        templates = _parse_by_tokens(soup)
+
     return templates
 
 
 def _find_template_cards(soup: BeautifulSoup) -> list[Tag]:
-    """Find all template card elements on the page."""
-    cards: list[Tag] = []
+    """Find all template card elements on the page.
 
-    # Try different selectors based on page structure
-    # Method 1: Look for accordion items
+    The IDTA page uses a grid layout with div.parts__title elements
+    containing template rows. Each row has columns:
+    - col-span-4: Template name
+    - col-span-2: IDTA number (or "extern")
+    - col-span-2: Version
+    - col-span-2: Status
+    - col-span-2: Links (GitHub, PDF)
+    """
+    # Primary: Find div.parts__title elements (current page structure)
+    cards = soup.select("div.parts__title")
+    if cards:
+        return cards
+
+    # Fallback: Try older selectors in case page structure changes
     accordion_items = soup.select(".accordion-item, .template-card, .teilmodell-item")
     if accordion_items:
-        cards.extend(accordion_items)
+        return list(accordion_items)
 
-    # Method 2: Look for sections with template-like content
-    if not cards:
-        sections = soup.find_all(["article", "section", "div"], class_=re.compile(r"template|model"))
-        cards.extend(sections)
-
-    # Method 3: Look for headings followed by content
-    if not cards:
-        headings = soup.find_all(["h2", "h3", "h4"], string=re.compile(r"IDTA|Submodel|Teilmodell"))
-        for h in headings:
-            parent = h.find_parent(["article", "section", "div"])
-            if parent and parent not in cards:
-                cards.append(parent)
-
-    return cards
+    return []
 
 
 def _parse_template_card(card: Tag) -> IDTATemplate | None:
-    """Parse a single template card element."""
-    # Extract template name
+    """Parse a single template card element.
+
+    The card is a grid row with these columns:
+    - col-span-4: Template name
+    - col-span-2: IDTA number (or "extern" for non-IDTA)
+    - col-span-2: Version (e.g., "1.0", "2.0.1")
+    - col-span-2: Status (e.g., "Published", "In Review")
+    - col-span-2: Links section with GitHub/PDF links
+    """
+    # Try grid-based parsing first (current page structure)
+    result = _parse_grid_card(card)
+    if result:
+        return result
+
+    # Fallback to generic parsing
     name = _extract_name(card)
     if not name:
         return None
 
-    # Extract IDTA number from name or card content
     idta_number = extract_idta_number(name) or extract_idta_number(card.get_text())
-
-    # Extract status
     status = _extract_status(card)
-
-    # Extract version
     version = _extract_version(card)
-
-    # Extract description
     description = _extract_description(card)
-
-    # Extract links
     pdf_link, github_link = _extract_links(card)
 
     return IDTATemplate(
@@ -147,6 +156,67 @@ def _parse_template_card(card: Tag) -> IDTATemplate | None:
         version=version,
         status=status,
         description=description,
+        pdf_link=pdf_link,
+        github_link=github_link,
+    )
+
+
+def _parse_grid_card(card: Tag) -> IDTATemplate | None:
+    """Parse a grid-based template card (current IDTA page structure)."""
+    # Find all grid columns
+    col4 = card.select_one(".col-span-4")
+    col2_divs = card.select(".col-span-2")
+
+    if not col4 or len(col2_divs) < 4:
+        return None
+
+    # Extract name from col-span-4
+    name = col4.get_text(strip=True)
+    if not name:
+        return None
+
+    # Extract IDTA number from first col-span-2
+    idta_text = col2_divs[0].get_text(strip=True)
+    idta_number: str | None = None
+    if idta_text and idta_text.lower() != "extern":
+        # Try to extract numeric IDTA number
+        idta_number = extract_idta_number(idta_text)
+        if not idta_number and re.match(r"^\d+$", idta_text):
+            idta_number = idta_text
+
+    # Extract version from second col-span-2
+    version = col2_divs[1].get_text(strip=True) or None
+
+    # Extract status from third col-span-2
+    status_text = col2_divs[2].get_text(strip=True).lower()
+    status: TemplateStatus = "unknown"
+    if "published" in status_text:
+        status = "Published"
+    elif "review" in status_text:
+        status = "In Review"
+    elif "development" in status_text:
+        status = "In Development"
+    elif "proposal" in status_text:
+        status = "Proposal submitted"
+
+    # Extract links from fourth col-span-2
+    pdf_link: str | None = None
+    github_link: str | None = None
+    links_div = col2_divs[3]
+    for a in links_div.find_all("a", href=True):
+        href = str(a["href"])
+        link_text = a.get_text().lower()
+        if "github" in href.lower() or "github" in link_text:
+            github_link = href
+        elif ".pdf" in href.lower() or "pdf" in link_text:
+            pdf_link = href
+
+    return IDTATemplate(
+        name=name,
+        idta_number=idta_number,
+        version=version,
+        status=status,
+        description=None,  # Grid layout doesn't show description in header
         pdf_link=pdf_link,
         github_link=github_link,
     )
@@ -252,22 +322,203 @@ def _extract_links(card: Tag) -> tuple[str | None, str | None]:
     return pdf_link, github_link
 
 
-async def scrape_idta(use_playwright_fallback: bool = True) -> list[IDTATemplate]:
+async def scrape_idta(use_playwright_fallback: bool = True) -> tuple[list[IDTATemplate], str]:
     """Scrape the IDTA Content Hub for template metadata.
 
     First tries httpx, falls back to Playwright if no results.
     """
     console.print("[blue]Fetching IDTA Content Hub...[/blue]")
 
-    # Try httpx first
-    html = await fetch_idta_html(use_playwright=False)
-    templates = parse_idta_html(html)
+    # Try httpx on each URL first
+    for url in IDTA_URLS:
+        html = await fetch_idta_html(url, use_playwright=False)
+        templates = parse_idta_html(html)
+        if templates:
+            console.print(f"[green]Found {len(templates)} templates from IDTA[/green]")
+            return templates, url
 
     # If no templates found and fallback enabled, try Playwright
-    if not templates and use_playwright_fallback:
+    if use_playwright_fallback:
         console.print("[yellow]No templates found with httpx, trying Playwright...[/yellow]")
-        html = await fetch_idta_html(use_playwright=True)
-        templates = parse_idta_html(html)
+        for url in IDTA_URLS:
+            html = await fetch_idta_html(url, use_playwright=True)
+            templates = parse_idta_html(html)
+            if templates:
+                console.print(f"[green]Found {len(templates)} templates from IDTA[/green]")
+                return templates, url
 
-    console.print(f"[green]Found {len(templates)} templates from IDTA[/green]")
-    return templates
+    console.print("[yellow]No templates found from IDTA[/yellow]")
+    return [], IDTA_URLS[0]
+
+
+class _TextToken:
+    def __init__(self, text: str) -> None:
+        self.text = text
+
+
+class _LinkToken:
+    def __init__(self, text: str, href: str) -> None:
+        self.text = text
+        self.href = href
+
+
+def _compact_spaces(text: str) -> str:
+    return " ".join(text.split())
+
+
+def _iter_tokens(soup: BeautifulSoup) -> list[_TextToken | _LinkToken]:
+    tokens: list[_TextToken | _LinkToken] = []
+    body = soup.body or soup
+    for el in body.descendants:
+        if isinstance(el, NavigableString):
+            if el.parent and getattr(el.parent, "name", "") == "a":
+                continue
+            txt = _compact_spaces(str(el))
+            if txt:
+                tokens.append(_TextToken(txt))
+        elif isinstance(el, Tag) and el.name == "a":
+            href = el.get("href")
+            if not href:
+                continue
+            txt = _compact_spaces(el.get_text(" ", strip=True))
+            if txt:
+                tokens.append(_LinkToken(txt, href))
+    return tokens
+
+
+def _looks_like_idta_number(text: str) -> bool:
+    t = text.strip().lower()
+    if t == "external":
+        return True
+    return bool(re.fullmatch(r"\d{5}", text.strip()))
+
+
+def _looks_like_version(text: str) -> bool:
+    return bool(re.fullmatch(r"\d+\.\d+(?:\.\d+)?", text.strip()))
+
+
+def _normalize_status(text: str) -> TemplateStatus:
+    t = text.strip().lower()
+    if "published" in t or "veröffentlicht" in t:
+        return "Published"
+    if "in review" in t or "in prüfung" in t:
+        return "In Review"
+    if "in development" in t or "in entwicklung" in t:
+        return "In Development"
+    if "proposal submitted" in t or "vorschlag" in t:
+        return "Proposal submitted"
+    return "unknown"
+
+
+def _next_text(
+    tokens: list[_TextToken | _LinkToken], start: int, skip: set[str]
+) -> tuple[str, int]:
+    i = start
+    while i < len(tokens):
+        tok = tokens[i]
+        if isinstance(tok, _TextToken):
+            tx = tok.text.strip()
+            if tx and tx not in skip:
+                return tx, i + 1
+        i += 1
+    raise ValueError("No text token found")
+
+
+def _take_until_marker(
+    tokens: list[_TextToken | _LinkToken], start: int, marker_text: str
+) -> tuple[list[_TextToken | _LinkToken], int]:
+    out: list[_TextToken | _LinkToken] = []
+    i = start
+    while i < len(tokens):
+        tok = tokens[i]
+        if isinstance(tok, _TextToken) and tok.text == marker_text:
+            return out, i
+        out.append(tok)
+        i += 1
+    return out, i
+
+
+def _parse_by_tokens(soup: BeautifulSoup) -> list[IDTATemplate]:
+    tokens = _iter_tokens(soup)
+    skip = {
+        "Submodel Template",
+        "IDTA Number",
+        "Version",
+        "Status",
+        "Downloads & Links",
+        "Coming soon",
+        "Select sorting",
+        "Sort by IDTA numbers",
+        "Sort by name",
+    }
+
+    entries: list[IDTATemplate] = []
+    i = 0
+    while i < len(tokens):
+        tok = tokens[i]
+        if isinstance(tok, _TextToken) and tok.text == "Downloads & Links":
+            try:
+                name, j = _next_text(tokens, i + 1, skip)
+                idta_no_raw, j = _next_text(tokens, j, skip)
+                version_raw, j = _next_text(tokens, j, skip)
+                status_raw, j = _next_text(tokens, j, skip)
+
+                if not _looks_like_idta_number(idta_no_raw):
+                    i += 1
+                    continue
+                if not _looks_like_version(version_raw):
+                    i += 1
+                    continue
+
+                status = _normalize_status(status_raw)
+                idta_no = None if idta_no_raw.strip().lower() == "external" else idta_no_raw
+
+                tail, k = _take_until_marker(tokens, j, marker_text="Submodel Template")
+
+                pdf_link = None
+                github_link = None
+                desc_parts: list[str] = []
+
+                for t in tail:
+                    if isinstance(t, _LinkToken):
+                        if not pdf_link and (
+                            ".pdf" in t.href.lower()
+                            or "pdf" in t.text.lower()
+                            or t.text.lower().startswith("download")
+                        ):
+                            pdf_link = t.href
+                        elif not github_link and "github.com" in t.href.lower():
+                            github_link = t.href
+                    elif isinstance(t, _TextToken):
+                        tx = t.text
+                        if tx in skip:
+                            continue
+                        if tx.startswith("Each submodel template that passes"):
+                            continue
+                        desc_parts.append(tx)
+
+                description = _compact_spaces(" ".join(desc_parts)) or None
+
+                entries.append(
+                    IDTATemplate(
+                        name=name,
+                        idta_number=idta_no,
+                        version=version_raw,
+                        status=status,
+                        description=description,
+                        pdf_link=pdf_link,
+                        github_link=github_link,
+                    )
+                )
+
+                i = k
+                continue
+            except Exception:
+                pass
+        i += 1
+
+    uniq: dict[tuple[str | None, str | None, str], IDTATemplate] = {}
+    for e in entries:
+        key = (e.idta_number, e.version, e.name)
+        uniq[key] = e
+    return list(uniq.values())

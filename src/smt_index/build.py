@@ -9,7 +9,7 @@ from pathlib import Path
 from rich.console import Console
 
 from smt_index.merge import merge_sources
-from smt_index.models import TemplateIndex
+from smt_index.models import IndexSources, TemplateIndex
 from smt_index.sources.github_zip import scrape_github
 from smt_index.sources.idta import scrape_idta
 
@@ -41,7 +41,7 @@ async def build_index(
     idta_task = scrape_idta(use_playwright_fallback=use_playwright)
     github_task = scrape_github()
 
-    idta_templates, github_entries = await asyncio.gather(idta_task, github_task)
+    (idta_templates, idta_url), github_entries = await asyncio.gather(idta_task, github_task)
 
     # Merge the data
     records = merge_sources(idta_templates, github_entries)
@@ -50,6 +50,10 @@ async def build_index(
     index = TemplateIndex(
         schema_version="1.0",
         generated_at=datetime.now(UTC),
+        sources=IndexSources(
+            idta_registered_templates=idta_url,
+            github_submodel_templates="https://github.com/admin-shell-io/submodel-templates",
+        ),
         templates=records,
     )
 
@@ -102,6 +106,7 @@ def _write_csv(index: TemplateIndex, path: Path) -> None:
             "github_link",
             "github_area",
             "github_repo_path",
+            "github_versions",
         ])
 
         # Rows
@@ -114,6 +119,9 @@ def _write_csv(index: TemplateIndex, path: Path) -> None:
                     if version.github:
                         gh_area = version.github[0].area
                         gh_path = version.github[0].repo_path
+                    gh_versions = ";".join(
+                        [f"{g.area}:{g.repo_path}" for g in version.github]
+                    )
 
                     writer.writerow([
                         template.id,
@@ -126,6 +134,7 @@ def _write_csv(index: TemplateIndex, path: Path) -> None:
                         version.links.github or "",
                         gh_area,
                         gh_path,
+                        gh_versions,
                     ])
             else:
                 # Template with no versions
@@ -140,6 +149,7 @@ def _write_csv(index: TemplateIndex, path: Path) -> None:
                     "",  # github_link
                     "",  # github_area
                     "",  # github_repo_path
+                    "",  # github_versions
                 ])
 
 

@@ -91,6 +91,29 @@ class TestParseIdtaHtml:
         # Should find multiple templates
         assert len(templates) >= 2
 
+    def test_parse_token_fallback(self) -> None:
+        html = """
+        <html><body>
+          <div>Downloads &amp; Links</div>
+          <div>Contact Information</div>
+          <div>02002</div>
+          <div>1.0</div>
+          <div>Published</div>
+          <a href="https://example.com/contact.pdf">Download</a>
+          <a href="https://github.com/admin-shell-io/submodel-templates/tree/main/published/Contact%20Information/1">GitHub</a>
+          <div>This is a description.</div>
+          <div>Submodel Template</div>
+        </body></html>
+        """
+        templates = parse_idta_html(html)
+        assert len(templates) == 1
+        t = templates[0]
+        assert t.idta_number == "02002"
+        assert t.version == "1.0"
+        assert t.status == "Published"
+        assert t.pdf_link is not None and t.pdf_link.endswith("contact.pdf")
+        assert t.github_link is not None and "github.com" in t.github_link
+
 
 class TestExtractStatus:
     """Tests for status extraction from HTML elements."""

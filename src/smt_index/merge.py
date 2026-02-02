@@ -1,14 +1,11 @@
 """Merge logic to combine IDTA and GitHub data sources."""
 
 from collections import defaultdict
+from urllib.parse import quote
 
 from rich.console import Console
 
-from smt_index.models import (
-    TemplateRecord,
-    TemplateVersion,
-    VersionLinks,
-)
+from smt_index.models import TemplateRecord, TemplateVersion, VersionLinks
 from smt_index.sources.github_zip import GitHubTemplateEntry, group_by_template
 from smt_index.sources.idta import IDTATemplate
 from smt_index.util import SemVer, normalize_github_url
@@ -37,19 +34,28 @@ def merge_sources(
     # Track which GitHub templates have been matched
     matched_github_slugs: set[str] = set()
 
-    # Process IDTA templates
+    # Group IDTA templates by slug (same template may have multiple version entries)
+    # Using slug ensures entries with/without IDTA numbers get grouped together
+    idta_by_slug: dict[str, list[IDTATemplate]] = defaultdict(list)
+    for idta in idta_templates:
+        idta_by_slug[idta.slug].append(idta)
+
+    # Process grouped IDTA templates
     records: list[TemplateRecord] = []
 
-    for idta in idta_templates:
-        # Try to find matching GitHub entries
+    for _slug, idta_group in idta_by_slug.items():
+        # Find best primary entry (prefer one with IDTA number)
+        primary = next((t for t in idta_group if t.idta_number), idta_group[0])
+
+        # Try to find matching GitHub entries (using primary IDTA entry)
         github_matches = _find_github_matches(
-            idta, github_by_slug, github_by_url_prefix
+            primary, github_by_slug, github_by_url_prefix
         )
 
         if github_matches:
             matched_github_slugs.add(github_matches[0].slug)
 
-        record = _create_record_from_idta(idta, github_matches)
+        record = _create_record_from_idta_group(idta_group, github_matches)
         records.append(record)
 
     # Add unmatched GitHub-only templates
@@ -70,9 +76,9 @@ def _build_url_index(entries: list[GitHubTemplateEntry]) -> dict[str, list[GitHu
     index: dict[str, list[GitHubTemplateEntry]] = defaultdict(list)
 
     for entry in entries:
-        # Extract the base URL (without version path)
-        # e.g., https://github.com/admin-shell-io/submodel-templates/tree/main/published/DigitalNameplate
-        base_url = entry.github_url.rsplit("/", len(str(entry.version).split(".")))[0]
+        base_path = _template_root_path(entry.repo_path)
+        encoded = _encode_path(base_path)
+        base_url = f"https://github.com/admin-shell-io/submodel-templates/tree/main/{encoded}"
         normalized = normalize_github_url(base_url)
         index[normalized].append(entry)
 
@@ -88,10 +94,10 @@ def _find_github_matches(
     # Try URL-based matching first
     if idta.github_link:
         normalized_url = normalize_github_url(idta.github_link)
-        # Check for prefix match
-        for url_prefix, entries in github_by_url_prefix.items():
-            if normalized_url.startswith(url_prefix) or url_prefix.startswith(normalized_url):
-                return entries
+        if "/tree/" in normalized_url:
+            for url_prefix, entries in github_by_url_prefix.items():
+                if normalized_url.startswith(url_prefix) or url_prefix.startswith(normalized_url):
+                    return entries
 
     # Fallback to slug-based matching
     if idta.slug in github_by_slug:
@@ -122,21 +128,51 @@ def _slugs_match(slug1: str, slug2: str) -> bool:
     return normalized1 == normalized2
 
 
-def _create_record_from_idta(
-    idta: IDTATemplate,
+def _template_root_path(repo_path: str) -> str:
+    """Strip version segments to get the template root path."""
+    parts = repo_path.strip("/").split("/")
+    while parts and parts[-1].isdigit():
+        parts.pop()
+    return "/".join(parts)
+
+
+def _encode_path(path: str) -> str:
+    """URL-encode each path segment."""
+    return "/".join(quote(p, safe="") for p in path.split("/"))
+
+
+def _create_record_from_idta_group(
+    idta_group: list[IDTATemplate],
     github_entries: list[GitHubTemplateEntry],
 ) -> TemplateRecord:
-    """Create a TemplateRecord from IDTA data and optional GitHub matches."""
-    # Collect all versions
+    """Create a TemplateRecord from multiple IDTA entries and optional GitHub matches.
+
+    When the same template has multiple version entries in IDTA, they're combined here.
+    """
+    if not idta_group:
+        raise ValueError("Cannot create record from empty IDTA group")
+
+    # Find best primary entry (prefer one with IDTA number for consistent ID)
+    primary = next((t for t in idta_group if t.idta_number), idta_group[0])
+
+    # Collect all versions from IDTA entries
     versions_map: dict[str, TemplateVersion] = {}
 
-    # Add version from IDTA if available
-    if idta.version:
-        version_str = _normalize_version(idta.version)
-        versions_map[version_str] = TemplateVersion(
-            version=version_str,
-            links=VersionLinks(pdf=idta.pdf_link, github=idta.github_link),
-        )
+    for idta in idta_group:
+        if idta.version:
+            version_str = _normalize_version(idta.version)
+            if version_str not in versions_map:
+                versions_map[version_str] = TemplateVersion(
+                    version=version_str,
+                    links=VersionLinks(pdf=idta.pdf_link, github=idta.github_link),
+                )
+            else:
+                # Merge links if this version already exists
+                existing = versions_map[version_str]
+                if not existing.links.pdf and idta.pdf_link:
+                    existing.links.pdf = idta.pdf_link
+                if not existing.links.github and idta.github_link:
+                    existing.links.github = idta.github_link
 
     # Add/merge GitHub versions
     for gh_entry in github_entries:
@@ -158,12 +194,21 @@ def _create_record_from_idta(
     # Sort versions and mark latest
     versions = _sort_and_mark_latest(list(versions_map.values()))
 
+    # Find the best description (prefer non-None)
+    description = next((t.description for t in idta_group if t.description), None)
+
+    # Generate unique ID: prefer idta-{number}-{slug} for uniqueness
+    if primary.idta_number:
+        template_id = f"idta-{primary.idta_number}-{primary.slug}"
+    else:
+        template_id = f"ext-{primary.slug}"
+
     return TemplateRecord(
-        id=idta.id,
-        name=idta.name,
-        idta_number=idta.idta_number,
-        status=idta.status,
-        description=idta.description,
+        id=template_id,
+        name=primary.name,
+        idta_number=primary.idta_number,
+        status=primary.status,
+        description=description,
         versions=versions,
     )
 
@@ -227,7 +272,9 @@ def _sort_and_mark_latest(versions: list[TemplateVersion]) -> list[TemplateVersi
 
     sorted_versions = sorted(versions, key=sort_key)
 
-    # Mark first (highest) version as latest
+    # Clear any existing markers then set latest
+    for v in sorted_versions:
+        v.is_latest = False
     if sorted_versions:
         sorted_versions[0].is_latest = True
 
