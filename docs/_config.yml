@@ -1,0 +1,44 @@
+# Jekyll configuration for GitHub Pages
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme
+
+title: Open SMT Index
+description: Machine-readable index of AAS Submodel Templates - unifying IDTA registry and GitHub sources
+show_downloads: true
+google_analytics:
+
+# GitHub repository info
+github:
+  repository_url: https://github.com/hadijannat/open-smt-index
+  repository_nwo: hadijannat/open-smt-index
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# Navigation
+nav:
+  - title: Home
+    url: /
+  - title: Installation
+    url: /installation
+  - title: Quick Start
+    url: /quickstart
+  - title: CLI Reference
+    url: /cli-reference
+  - title: API Reference
+    url: /api-reference
+  - title: Output Schema
+    url: /output-schema
+  - title: Examples
+    url: /examples
+  - title: Contributing
+    url: /contributing

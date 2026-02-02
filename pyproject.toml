@@ -49,8 +49,9 @@ dev = [
 smt-index = "smt_index.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/admin-shell-io/open-smt-index"
-Repository = "https://github.com/admin-shell-io/open-smt-index"
+Homepage = "https://github.com/hadijannat/open-smt-index"
+Repository = "https://github.com/hadijannat/open-smt-index"
+Documentation = "https://hadijannat.github.io/open-smt-index/"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/smt_index"]
