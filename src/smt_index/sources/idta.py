@@ -4,13 +4,23 @@ import re
 from dataclasses import dataclass, field
 
 import httpx
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup, Tag
+from bs4.element import NavigableString
 from rich.console import Console
 
 from smt_index.models import TemplateStatus
 from smt_index.util import extract_idta_number, slugify
 
 console = Console()
+
+# Playwright is optional - check if available
+PLAYWRIGHT_AVAILABLE = False
+try:
+    from playwright.async_api import async_playwright
+
+    PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    async_playwright = None  # type: ignore[assignment]
 
 IDTA_URLS = [
     "https://industrialdigitaltwin.org/content-hub/teilmodelle",
@@ -26,6 +36,7 @@ class IDTATemplate:
     idta_number: str | None = None
     version: str | None = None
     status: TemplateStatus = "unknown"
+    raw_status: str | None = None  # Original status text before normalization
     description: str | None = None
     pdf_link: str | None = None
     github_link: str | None = None
@@ -62,7 +73,10 @@ async def _fetch_with_httpx(url: str) -> str:
 
 async def _fetch_with_playwright(url: str) -> str:
     """Fetch using Playwright for JS-rendered content."""
-    from playwright.async_api import async_playwright
+    if not PLAYWRIGHT_AVAILABLE or async_playwright is None:
+        raise ImportError(
+            "Playwright is not installed. Install with: pip install 'smt-index[scraper]'"
+        )
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
@@ -155,6 +169,7 @@ def _parse_template_card(card: Tag) -> IDTATemplate | None:
         idta_number=idta_number,
         version=version,
         status=status,
+        raw_status=None,  # Generic parsing doesn't have access to raw status
         description=description,
         pdf_link=pdf_link,
         github_link=github_link,
@@ -188,7 +203,8 @@ def _parse_grid_card(card: Tag) -> IDTATemplate | None:
     version = col2_divs[1].get_text(strip=True) or None
 
     # Extract status from third col-span-2
-    status_text = col2_divs[2].get_text(strip=True).lower()
+    raw_status_text = col2_divs[2].get_text(strip=True)
+    status_text = raw_status_text.lower()
     status: TemplateStatus = "unknown"
     if "published" in status_text:
         status = "Published"
@@ -216,6 +232,7 @@ def _parse_grid_card(card: Tag) -> IDTATemplate | None:
         idta_number=idta_number,
         version=version,
         status=status,
+        raw_status=raw_status_text or None,
         description=None,  # Grid layout doesn't show description in header
         pdf_link=pdf_link,
         github_link=github_link,
@@ -339,13 +356,23 @@ async def scrape_idta(use_playwright_fallback: bool = True) -> tuple[list[IDTATe
 
     # If no templates found and fallback enabled, try Playwright
     if use_playwright_fallback:
-        console.print("[yellow]No templates found with httpx, trying Playwright...[/yellow]")
-        for url in IDTA_URLS:
-            html = await fetch_idta_html(url, use_playwright=True)
-            templates = parse_idta_html(html)
-            if templates:
-                console.print(f"[green]Found {len(templates)} templates from IDTA[/green]")
-                return templates, url
+        if not PLAYWRIGHT_AVAILABLE:
+            console.print(
+                "[yellow]No templates found with httpx. "
+                "Playwright not installed for JS fallback.[/yellow]"
+            )
+            console.print(
+                "[dim]Install Playwright with: pip install 'smt-index[scraper]' && "
+                "playwright install chromium[/dim]"
+            )
+        else:
+            console.print("[yellow]No templates found with httpx, trying Playwright...[/yellow]")
+            for url in IDTA_URLS:
+                html = await fetch_idta_html(url, use_playwright=True)
+                templates = parse_idta_html(html)
+                if templates:
+                    console.print(f"[green]Found {len(templates)} templates from IDTA[/green]")
+                    return templates, url
 
     console.print("[yellow]No templates found from IDTA[/yellow]")
     return [], IDTA_URLS[0]
@@ -382,7 +409,9 @@ def _iter_tokens(soup: BeautifulSoup) -> list[_TextToken | _LinkToken]:
                 continue
             txt = _compact_spaces(el.get_text(" ", strip=True))
             if txt:
-                tokens.append(_LinkToken(txt, href))
+                # href can be a list in edge cases, use first value or convert to string
+                href_str = href[0] if isinstance(href, list) else str(href)
+                tokens.append(_LinkToken(txt, href_str))
     return tokens
 
 
@@ -471,6 +500,7 @@ def _parse_by_tokens(soup: BeautifulSoup) -> list[IDTATemplate]:
                     continue
 
                 status = _normalize_status(status_raw)
+                raw_status = status_raw.strip() or None
                 idta_no = None if idta_no_raw.strip().lower() == "external" else idta_no_raw
 
                 tail, k = _take_until_marker(tokens, j, marker_text="Submodel Template")
@@ -505,6 +535,7 @@ def _parse_by_tokens(soup: BeautifulSoup) -> list[IDTATemplate]:
                         idta_number=idta_no,
                         version=version_raw,
                         status=status,
+                        raw_status=raw_status,
                         description=description,
                         pdf_link=pdf_link,
                         github_link=github_link,

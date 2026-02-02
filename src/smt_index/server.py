@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import JSONResponse
@@ -47,7 +48,7 @@ def create_app(index_path: Path) -> FastAPI:
             default=None,
             description="Search query for template name or description",
         ),
-    ) -> list[dict]:
+    ) -> list[dict[str, Any]]:
         """List all templates with optional filtering."""
         results = index.templates
 
@@ -82,7 +83,7 @@ def create_app(index_path: Path) -> FastAPI:
         ]
 
     @app.get("/templates/{template_id}")
-    async def get_template(template_id: str) -> dict:
+    async def get_template(template_id: str) -> dict[str, Any]:
         """Get a specific template by ID."""
         template = templates_by_id.get(template_id)
 
@@ -97,7 +98,7 @@ def create_app(index_path: Path) -> FastAPI:
         return JSONResponse(content=index.model_dump(mode="json"))
 
     @app.get("/stats")
-    async def get_stats() -> dict:
+    async def get_stats() -> dict[str, Any]:
         """Get index statistics."""
         # Count by status
         status_counts: dict[str, int] = {}
@@ -134,7 +135,7 @@ def _get_default_app() -> FastAPI:
         app = FastAPI(title="SMT Index API (Not Configured)")
 
         @app.get("/")
-        async def root() -> dict:
+        async def root() -> dict[str, str]:
             return {
                 "error": "Index not found",
                 "message": "Run 'smt-index build' to create the index, or use 'smt-index serve --index <path>'",

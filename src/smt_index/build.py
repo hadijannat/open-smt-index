@@ -4,6 +4,7 @@ import asyncio
 import csv
 import json
 import re
+import subprocess
 from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
@@ -11,11 +12,30 @@ from pathlib import Path
 from rich.console import Console
 
 from smt_index.merge import merge_sources
-from smt_index.models import IndexSources, TemplateIndex
+from smt_index.models import BuildProvenance, IndexSources, SourceProvenance, TemplateIndex
 from smt_index.sources.github_zip import scrape_github
 from smt_index.sources.idta import scrape_idta
 
 console = Console()
+
+# Tool version - should match pyproject.toml
+TOOL_VERSION = "0.1.0"
+
+
+def _get_git_commit() -> str | None:
+    """Get the current git commit hash if in a git repository."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if result.returncode == 0:
+            return result.stdout.strip()[:12]  # Short hash
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+    return None
 
 
 async def build_index(
@@ -38,6 +58,7 @@ async def build_index(
         The built TemplateIndex
     """
     console.print("[bold blue]Building SMT Index...[/bold blue]")
+    build_started_at = datetime.now(UTC)
 
     # Fetch data from both sources concurrently
     idta_task = scrape_idta(use_playwright_fallback=use_playwright)
@@ -45,17 +66,49 @@ async def build_index(
 
     (idta_templates, idta_url), github_entries = await asyncio.gather(idta_task, github_task)
 
+    # Track when sources were fetched (after concurrent fetch completes)
+    fetch_completed_at = datetime.now(UTC)
+
+    # Build provenance records
+    github_url = "https://github.com/admin-shell-io/submodel-templates"
+    source_provenance = [
+        SourceProvenance(
+            url=idta_url,
+            fetched_at=fetch_completed_at,
+            record_count=len(idta_templates),
+        ),
+        SourceProvenance(
+            url=github_url,
+            fetched_at=fetch_completed_at,
+            record_count=len(github_entries),
+        ),
+    ]
+
     # Merge the data
     records = merge_sources(idta_templates, github_entries)
+
+    build_completed_at = datetime.now(UTC)
+    build_duration = (build_completed_at - build_started_at).total_seconds()
+
+    # Create provenance metadata
+    provenance = BuildProvenance(
+        build_started_at=build_started_at,
+        build_completed_at=build_completed_at,
+        build_duration_seconds=build_duration,
+        sources=source_provenance,
+        git_commit=_get_git_commit(),
+        tool_version=TOOL_VERSION,
+    )
 
     # Create the index
     index = TemplateIndex(
         schema_version="1.0",
-        generated_at=datetime.now(UTC),
+        generated_at=build_completed_at,
         sources=IndexSources(
             idta_registered_templates=idta_url,
-            github_submodel_templates="https://github.com/admin-shell-io/submodel-templates",
+            github_submodel_templates=github_url,
         ),
+        provenance=provenance,
         templates=records,
     )
 

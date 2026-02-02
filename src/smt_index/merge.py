@@ -201,11 +201,15 @@ def _create_record_from_idta_group(
     else:
         template_id = f"ext-{primary.slug}"
 
+    # Find the best raw_status (prefer non-None)
+    raw_status = next((t.raw_status for t in idta_group if t.raw_status), None)
+
     return TemplateRecord(
         id=template_id,
         name=primary.name,
         idta_number=primary.idta_number,
         status=primary.status,
+        raw_status=raw_status,
         description=description,
         versions=versions,
     )
