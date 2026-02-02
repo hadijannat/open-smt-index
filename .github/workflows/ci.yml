@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  lint:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,50 +20,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ruff mypy
-
-      - name: Run ruff
-        run: ruff check .
-
-      - name: Run ruff format check
-        run: ruff format --check .
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
+          pip install ruff
           pip install -e ".[dev]"
 
-      - name: Run tests
+      - name: Lint
+        run: ruff check . && ruff format --check .
+
+      - name: Test
         run: pytest -v
 
-  build-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e .
-          playwright install chromium
-
-      - name: Test CLI help
+      - name: CLI check
         run: smt-index --help
-
-      - name: Test version command
-        run: smt-index version
