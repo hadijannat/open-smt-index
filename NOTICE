@@ -1,0 +1,10 @@
+Open SMT Index
+Copyright 2024 Open SMT Index Contributors
+
+This product includes software developed by the Open SMT Index project.
+
+This tool indexes data from:
+- Industrial Digital Twin Association (IDTA) Content Hub
+- admin-shell-io/submodel-templates GitHub repository
+
+The indexed data itself is subject to the licenses of the original sources.
