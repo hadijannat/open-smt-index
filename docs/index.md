@@ -7,6 +7,16 @@ title: Open SMT Index
 
 A CLI tool for creating a **machine-readable index** of AAS Submodel Templates by combining data from the IDTA registry and GitHub repository.
 
+<div id="quick-stats" class="quick-stats">
+  <!-- Populated by JavaScript -->
+</div>
+
+<div class="mini-chart-container">
+  <canvas id="mini-status-chart"></canvas>
+</div>
+
+<p><a href="dashboard" class="btn" style="background: #159957; border-color: #159957;">View Full Dashboard &rarr;</a></p>
+
 ---
 
 ## What is SMT Index?

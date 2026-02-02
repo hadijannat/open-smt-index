@@ -28,6 +28,8 @@ exclude:
 nav:
   - title: Home
     url: /
+  - title: Dashboard
+    url: /dashboard
   - title: Installation
     url: /installation
   - title: Quick Start

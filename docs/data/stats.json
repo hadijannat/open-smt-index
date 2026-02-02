@@ -1,0 +1,1148 @@
+{
+  "generated_at": "2026-02-02T19:01:18.871737Z",
+  "totals": {
+    "templates": 100,
+    "versions": 175
+  },
+  "by_status": {
+    "In Development": 36,
+    "Published": 47,
+    "unknown": 1,
+    "In Review": 13,
+    "Proposal submitted": 3
+  },
+  "by_source": {
+    "idta": 93,
+    "github_only": 5,
+    "external": 2
+  },
+  "families": [
+    {
+      "name": "Other",
+      "templates": [
+        "ext-facility-related-environmental-data",
+        "ext-product-related-environmental-data",
+        "gh-control-configuration-and-parametrization-for-nc-and-cnc-machines",
+        "gh-software-nameplate",
+        "gh-worskstation-worker-matching-data",
+        "gh-zvei-digital-nameplate",
+        "idta-02001-inclusion-of-module-type-package-mtp-data-into-asset-administration-shell",
+        "idta-02002-contact-information",
+        "idta-02004-handover-documentation",
+        "idta-02005-provision-of-simulation-models",
+        "idta-02007-nameplate-for-software-in-manufacturing",
+        "idta-02008-time-series-data",
+        "idta-02009-opc-ua-server-data-sheet",
+        "idta-02012-information-model-for-p-i-diagrams-based-on-dexpi-standard",
+        "idta-02013-reliability",
+        "idta-02014-functional-safety",
+        "idta-02015-control-component-type",
+        "idta-02016-control-component-instance",
+        "idta-02017-asset-interfaces-description",
+        "idta-02018-maintenance-instructions",
+        "idta-02019-plant-asset-management",
+        "idta-02020-capabilties-for-industrial-appliances",
+        "idta-02021-sizing-of-power-drive-trains",
+        "idta-02022-wireless-communication",
+        "idta-02024-material-integration",
+        "idta-02026-provision-of-3d-models",
+        "idta-02027-asset-interfaces-mapping-configuration",
+        "idta-02030-computing-platform-resources",
+        "idta-02031-process-parameters-instance",
+        "idta-02031-process-parameters-type",
+        "idta-02032-inspection-documents-of-steel-products",
+        "idta-02034-creation-and-classification-of-materials-in-an-erp-pdm-plm-and-pim-system",
+        "idta-02035-battery-data-template",
+        "idta-02036-product-change-notifications-for-industrial-product-types-and-items-in-manufacturing",
+        "idta-02037-automation-engineering",
+        "idta-02039-handover-information-for-engineering-authoring-systems",
+        "idta-02040-spare-parts-and-consumables-lists",
+        "idta-02041-replacement-and-successor-product",
+        "idta-02042-software-bill-of-materials",
+        "idta-02043-vulnerability-management",
+        "idta-02045-data-model-for-asset-location",
+        "idta-02046-workstation-worker-matching-data",
+        "idta-02049-quality-control-for-machining",
+        "idta-02050-purchase-order",
+        "idta-02053-control-configuration-and-parametrization-for-nc-cnc-machines",
+        "idta-02056-data-retention-policies",
+        "idta-02057-explosion-protection",
+        "idta-02058-artificial-intelligence-dataset",
+        "idta-02059-artificial-intelligence-deployment",
+        "idta-02060-artificial-intelligence-model-nameplate",
+        "idta-02062-interface-connectors",
+        "idta-02063-intelligent-information-for-use",
+        "idta-02064-safety-instrumented-functions-sif-for-the-process-industries",
+        "idta-02065-digital-quality-document-digital-calibration-certificate",
+        "idta-02066-process-variables-for-manufacturing-key-performance-indicators",
+        "idta-02067-production-calendar",
+        "idta-02068-provision-of-company-data",
+        "idta-02072-layout-planning",
+        "idta-02075-building-automation-data-for-plant-planning",
+        "idta-02076-energy-flexibility-data-model",
+        "idta-02078-end-of-life-recycling",
+        "idta-02079-sis-device-for-the-process-industries",
+        "idta-02080-material-data-for-the-characterization-of-plastic-waste-feedstocks-and-recycled-plastics",
+        "idta-02081-unmanned-aerial-vehicle-drone",
+        "idta-02082-resilience-assessment-in-industrial-production",
+        "idta-02083-pce-request-process-data-according-ne-159",
+        "idta-02084-pce-request-p-id-information-according-iec-62424",
+        "idta-02085-requirement-model-for-assets-and-entities",
+        "idta-02086-characteristic-curves",
+        "idta-02088-product-material-compliance",
+        "idta-02089-supply-chain-event-data-collection",
+        "idta-02090-standard-data-model-for-asset-inventory-of-operational-technology",
+        "idta-02091-digital-worker-profile",
+        "idta-02092-human-worker-assignment-data",
+        "idta-02093-environmental-product-declaration-epd-type-iii",
+        "idta-02094-product-energy-consumption",
+        "idta-02095-energy-monitoring"
+      ]
+    },
+    {
+      "name": "Technical Data",
+      "templates": [
+        "gh-technical-data-for-automated-guided-vehicles",
+        "idta-02003-generic-frame-for-technical-data-for-industrial-equipment-in-manufacturing",
+        "idta-02044-technical-data-for-injection-molding",
+        "idta-02047-technical-data-for-automated-guided-vehicles-in-intralogistics",
+        "idta-02061-technical-data-for-fiber-optic-microduct-cabling-for-broadband-expansion"
+      ]
+    },
+    {
+      "name": "Hierarchical Structures",
+      "templates": [
+        "idta-02011-hierarchical-structures-enabling-bills-of-material",
+        "idta-02011-hierarchical-structures-enabling-bills-of-material-extension-based-on-iec-81346"
+      ]
+    },
+    {
+      "name": "Carbon Footprint",
+      "templates": [
+        "idta-02023-carbon-footprint",
+        "idta-02087-company-carbon-footprint"
+      ]
+    },
+    {
+      "name": "Digital Battery Passport \u2013",
+      "templates": [
+        "idta-02035-digital-battery-passport-part-1-digital-nameplate",
+        "idta-02035-digital-battery-passport-part-2-handover-documentation",
+        "idta-02035-digital-battery-passport-part-3-product-carbon-footprint",
+        "idta-02035-digital-battery-passport-part-4-technical-data",
+        "idta-02035-digital-battery-passport-part-5-product-condition",
+        "idta-02035-digital-battery-passport-part-6-material-composition",
+        "idta-02035-digital-battery-passport-part-7-circularity"
+      ]
+    },
+    {
+      "name": "Plastic and Rubber Moulds",
+      "templates": [
+        "idta-02038-plastic-and-rubber-moulds-part-1-identification",
+        "idta-02038-plastic-and-rubber-moulds-part-2-engineering-data"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "ext-facility-related-environmental-data",
+      "name": "Facility Related Environmental Data",
+      "idta_number": null,
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "ext-product-related-environmental-data",
+      "name": "Product Related Environmental Data",
+      "idta_number": null,
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "gh-control-configuration-and-parametrization-for-nc-and-cnc-machines",
+      "name": "Control Configuration and Parametrization for NC and CNC Machines",
+      "idta_number": null,
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "gh-software-nameplate",
+      "name": "Software Nameplate",
+      "idta_number": null,
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "gh-technical-data-for-automated-guided-vehicles",
+      "name": "Technical Data for Automated Guided Vehicles",
+      "idta_number": null,
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "gh-worskstation-worker-matching-data",
+      "name": "Worskstation Worker Matching Data",
+      "idta_number": null,
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "gh-zvei-digital-nameplate",
+      "name": "ZVEI_Digital_Nameplate",
+      "idta_number": null,
+      "status": "unknown",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02001-inclusion-of-module-type-package-mtp-data-into-asset-administration-shell",
+      "name": "Inclusion of Module Type Package (MTP) Data into Asset Administration Shell",
+      "idta_number": "02001",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02002-contact-information",
+      "name": "Contact Information",
+      "idta_number": "02002",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02003-generic-frame-for-technical-data-for-industrial-equipment-in-manufacturing",
+      "name": "Generic Frame for Technical Data for Industrial Equipment in Manufacturing",
+      "idta_number": "02003",
+      "status": "Published",
+      "version_count": 5,
+      "latest_version": "2.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02004-handover-documentation",
+      "name": "Handover Documentation",
+      "idta_number": "02004",
+      "status": "Published",
+      "version_count": 3,
+      "latest_version": "2.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02005-provision-of-simulation-models",
+      "name": "Provision of Simulation Models",
+      "idta_number": "02005",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02006-digital-nameplate-for-industrial-equipment",
+      "name": "Digital Nameplate for industrial equipment",
+      "idta_number": "02006",
+      "status": "Published",
+      "version_count": 4,
+      "latest_version": "3.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02007-nameplate-for-software-in-manufacturing",
+      "name": "Nameplate for Software in Manufacturing",
+      "idta_number": "02007",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02008-time-series-data",
+      "name": "Time Series Data",
+      "idta_number": "02008",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.1.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02009-opc-ua-server-data-sheet",
+      "name": "OPC UA Server Data Sheet",
+      "idta_number": "02009",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02010-service-request-notification",
+      "name": "Service Request Notification",
+      "idta_number": "02010",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02011-hierarchical-structures-enabling-bills-of-material",
+      "name": "Hierarchical Structures enabling Bills of Material",
+      "idta_number": "02011",
+      "status": "Published",
+      "version_count": 3,
+      "latest_version": "1.1.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02011-hierarchical-structures-enabling-bills-of-material-extension-based-on-iec-81346",
+      "name": "Hierarchical Structures enabling Bills of Material- Extension based on IEC 81346",
+      "idta_number": "02011",
+      "status": "Published",
+      "version_count": 3,
+      "latest_version": "1.1.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02012-information-model-for-p-i-diagrams-based-on-dexpi-standard",
+      "name": "Information Model for P&I Diagrams based on DEXPI Standard",
+      "idta_number": "02012",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02013-reliability",
+      "name": "Reliability",
+      "idta_number": "02013",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02014-functional-safety",
+      "name": "Functional Safety",
+      "idta_number": "02014",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02015-control-component-type",
+      "name": "Control Component Type",
+      "idta_number": "02015",
+      "status": "Published",
+      "version_count": 3,
+      "latest_version": "2.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02016-control-component-instance",
+      "name": "Control Component Instance",
+      "idta_number": "02016",
+      "status": "Published",
+      "version_count": 3,
+      "latest_version": "2.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02017-asset-interfaces-description",
+      "name": "Asset Interfaces Description",
+      "idta_number": "02017",
+      "status": "In Review",
+      "version_count": 3,
+      "latest_version": "1.1.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02018-maintenance-instructions",
+      "name": "Maintenance Instructions",
+      "idta_number": "02018",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02019-plant-asset-management",
+      "name": "Plant Asset Management",
+      "idta_number": "02019",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02020-capabilties-for-industrial-appliances",
+      "name": "Capabilties for Industrial Appliances",
+      "idta_number": "02020",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02021-sizing-of-power-drive-trains",
+      "name": "Sizing of power drive trains",
+      "idta_number": "02021",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02022-wireless-communication",
+      "name": "Wireless Communication",
+      "idta_number": "02022",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02023-carbon-footprint",
+      "name": "Carbon Footprint",
+      "idta_number": "02023",
+      "status": "Published",
+      "version_count": 3,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02024-material-integration",
+      "name": "Material Integration",
+      "idta_number": "02024",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02026-provision-of-3d-models",
+      "name": "Provision of 3D Models",
+      "idta_number": "02026",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02027-asset-interfaces-mapping-configuration",
+      "name": "Asset Interfaces Mapping Configuration",
+      "idta_number": "02027",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02029-sensor-4-0-part1-measurement-value",
+      "name": "Sensor 4.0 Part1: Measurement Value",
+      "idta_number": "02029",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02030-computing-platform-resources",
+      "name": "Computing Platform Resources",
+      "idta_number": "02030",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02031-process-parameters-instance",
+      "name": "Process Parameters Instance",
+      "idta_number": "02031",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02031-process-parameters-type",
+      "name": "Process Parameters Type",
+      "idta_number": "02031",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02032-inspection-documents-of-steel-products",
+      "name": "Inspection Documents of Steel Products",
+      "idta_number": "02032",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02033-additive-manufacturing-part-1-part-1-pbf-lb-m-machine-for-metal-3d-printing-machine",
+      "name": "Additive Manufacturing Part 1: Part 1: PBF \u2013 LB/M Machine (for. Metal 3D Printing Machine)",
+      "idta_number": "02033",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02034-creation-and-classification-of-materials-in-an-erp-pdm-plm-and-pim-system",
+      "name": "Creation and classification of materials in an ERP, PDM/PLM and PIM system",
+      "idta_number": "02034",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02035-battery-data-template",
+      "name": "Battery Data Template",
+      "idta_number": "02035",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02035-digital-battery-passport-part-1-digital-nameplate",
+      "name": "Digital Battery Passport \u2013 Part 1: Digital Nameplate",
+      "idta_number": "02035",
+      "status": "In Review",
+      "version_count": 4,
+      "latest_version": "3.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02035-digital-battery-passport-part-2-handover-documentation",
+      "name": "Digital Battery Passport \u2013 Part 2: Handover Documentation",
+      "idta_number": "02035",
+      "status": "In Review",
+      "version_count": 4,
+      "latest_version": "2.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02035-digital-battery-passport-part-3-product-carbon-footprint",
+      "name": "Digital Battery Passport \u2013 Part 3: Product Carbon Footprint",
+      "idta_number": "02035",
+      "status": "In Review",
+      "version_count": 3,
+      "latest_version": "1.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02035-digital-battery-passport-part-4-technical-data",
+      "name": "Digital Battery Passport \u2013 Part 4: Technical Data",
+      "idta_number": "02035",
+      "status": "In Review",
+      "version_count": 6,
+      "latest_version": "2.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02035-digital-battery-passport-part-5-product-condition",
+      "name": "Digital Battery Passport \u2013 Part 5: Product Condition",
+      "idta_number": "02035",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02035-digital-battery-passport-part-6-material-composition",
+      "name": "Digital Battery Passport \u2013 Part 6: Material Composition",
+      "idta_number": "02035",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02035-digital-battery-passport-part-7-circularity",
+      "name": "Digital Battery Passport \u2013 Part 7: Circularity",
+      "idta_number": "02035",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02036-product-change-notifications-for-industrial-product-types-and-items-in-manufacturing",
+      "name": "Product Change Notifications for Industrial product types and items in manufacturing",
+      "idta_number": "02036",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02037-automation-engineering",
+      "name": "Automation Engineering",
+      "idta_number": "02037",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02038-plastic-and-rubber-moulds-part-1-identification",
+      "name": "Plastic and Rubber Moulds Part 1: Identification",
+      "idta_number": "02038",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02038-plastic-and-rubber-moulds-part-2-engineering-data",
+      "name": "Plastic and Rubber Moulds Part 2: Engineering Data",
+      "idta_number": "02038",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02039-handover-information-for-engineering-authoring-systems",
+      "name": "Handover information for engineering authoring systems",
+      "idta_number": "02039",
+      "status": "Proposal submitted",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02040-spare-parts-and-consumables-lists",
+      "name": "Spare parts and consumables lists",
+      "idta_number": "02040",
+      "status": "Proposal submitted",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02041-replacement-and-successor-product",
+      "name": "Replacement and successor product",
+      "idta_number": "02041",
+      "status": "Proposal submitted",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02042-software-bill-of-materials",
+      "name": "Software Bill of Materials",
+      "idta_number": "02042",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02043-vulnerability-management",
+      "name": "Vulnerability Management",
+      "idta_number": "02043",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02044-technical-data-for-injection-molding",
+      "name": "Technical Data for Injection Molding",
+      "idta_number": "02044",
+      "status": "In Development",
+      "version_count": 6,
+      "latest_version": "2.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02045-data-model-for-asset-location",
+      "name": "Data Model for Asset Location",
+      "idta_number": "02045",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02046-workstation-worker-matching-data",
+      "name": "Workstation Worker Matching Data",
+      "idta_number": "02046",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02047-technical-data-for-automated-guided-vehicles-in-intralogistics",
+      "name": "Technical Data for Automated Guided Vehicles in Intralogistics",
+      "idta_number": "02047",
+      "status": "Published",
+      "version_count": 6,
+      "latest_version": "2.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02048-predictive-maintenance",
+      "name": "Predictive Maintenance",
+      "idta_number": "02048",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02049-quality-control-for-machining",
+      "name": "Quality Control for Machining",
+      "idta_number": "02049",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02050-purchase-order",
+      "name": "Purchase Order",
+      "idta_number": "02050",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02053-control-configuration-and-parametrization-for-nc-cnc-machines",
+      "name": "Control configuration and parametrization for NC/CNC machines",
+      "idta_number": "02053",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02056-data-retention-policies",
+      "name": "Data Retention Policies",
+      "idta_number": "02056",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02057-explosion-protection",
+      "name": "Explosion Protection",
+      "idta_number": "02057",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.9.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02058-artificial-intelligence-dataset",
+      "name": "Artificial Intelligence Dataset",
+      "idta_number": "02058",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02059-artificial-intelligence-deployment",
+      "name": "Artificial Intelligence Deployment",
+      "idta_number": "02059",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02060-artificial-intelligence-model-nameplate",
+      "name": "Artificial Intelligence Model Nameplate",
+      "idta_number": "02060",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02061-technical-data-for-fiber-optic-microduct-cabling-for-broadband-expansion",
+      "name": "Technical Data for Fiber Optic Microduct Cabling for Broadband Expansion",
+      "idta_number": "02061",
+      "status": "In Development",
+      "version_count": 6,
+      "latest_version": "2.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02062-interface-connectors",
+      "name": "Interface Connectors",
+      "idta_number": "02062",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02063-intelligent-information-for-use",
+      "name": "Intelligent Information for Use",
+      "idta_number": "02063",
+      "status": "Published",
+      "version_count": 2,
+      "latest_version": "1.0.1",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02064-safety-instrumented-functions-sif-for-the-process-industries",
+      "name": "Safety instrumented functions (SIF) for the process industries",
+      "idta_number": "02064",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02065-digital-quality-document-digital-calibration-certificate",
+      "name": "Digital Quality Document (Digital Calibration Certificate)",
+      "idta_number": "02065",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02066-process-variables-for-manufacturing-key-performance-indicators",
+      "name": "Process Variables for Manufacturing Key Performance Indicators",
+      "idta_number": "02066",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02067-production-calendar",
+      "name": "Production Calendar",
+      "idta_number": "02067",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02068-provision-of-company-data",
+      "name": "Provision of Company Data",
+      "idta_number": "02068",
+      "status": "Published",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": true,
+      "has_github": true
+    },
+    {
+      "id": "idta-02072-layout-planning",
+      "name": "Layout planning",
+      "idta_number": "02072",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02075-building-automation-data-for-plant-planning",
+      "name": "Building automation data for plant planning",
+      "idta_number": "02075",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02076-energy-flexibility-data-model",
+      "name": "Energy Flexibility Data Model",
+      "idta_number": "02076",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02078-end-of-life-recycling",
+      "name": "End-of-Life (Recycling)",
+      "idta_number": "02078",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02079-sis-device-for-the-process-industries",
+      "name": "SIS device for the process industries",
+      "idta_number": "02079",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02080-material-data-for-the-characterization-of-plastic-waste-feedstocks-and-recycled-plastics",
+      "name": "Material Data for the Characterization of Plastic Waste Feedstocks and Recycled Plastics",
+      "idta_number": "02080",
+      "status": "In Review",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02081-unmanned-aerial-vehicle-drone",
+      "name": "Unmanned aerial vehicle (Drone)",
+      "idta_number": "02081",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02082-resilience-assessment-in-industrial-production",
+      "name": "Resilience Assessment in Industrial Production",
+      "idta_number": "02082",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02083-pce-request-process-data-according-ne-159",
+      "name": "PCE Request \u2013 Process data according NE 159",
+      "idta_number": "02083",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02084-pce-request-p-id-information-according-iec-62424",
+      "name": "PCE Request \u2013 P&ID Information according IEC 62424",
+      "idta_number": "02084",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02085-requirement-model-for-assets-and-entities",
+      "name": "Requirement model for Assets and Entities",
+      "idta_number": "02085",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02086-characteristic-curves",
+      "name": "Characteristic curves",
+      "idta_number": "02086",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02087-company-carbon-footprint",
+      "name": "Company Carbon Footprint",
+      "idta_number": "02087",
+      "status": "In Development",
+      "version_count": 3,
+      "latest_version": "1.0.1",
+      "has_pdf": false,
+      "has_github": true
+    },
+    {
+      "id": "idta-02088-product-material-compliance",
+      "name": "Product Material Compliance",
+      "idta_number": "02088",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02089-supply-chain-event-data-collection",
+      "name": "Supply Chain Event Data Collection",
+      "idta_number": "02089",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02090-standard-data-model-for-asset-inventory-of-operational-technology",
+      "name": "Standard Data Model for Asset Inventory of Operational Technology",
+      "idta_number": "02090",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02091-digital-worker-profile",
+      "name": "Digital Worker Profile",
+      "idta_number": "02091",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02092-human-worker-assignment-data",
+      "name": "Human Worker Assignment Data",
+      "idta_number": "02092",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02093-environmental-product-declaration-epd-type-iii",
+      "name": "Environmental Product Declaration (EPD) Type III",
+      "idta_number": "02093",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02094-product-energy-consumption",
+      "name": "Product Energy Consumption",
+      "idta_number": "02094",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    },
+    {
+      "id": "idta-02095-energy-monitoring",
+      "name": "Energy Monitoring",
+      "idta_number": "02095",
+      "status": "In Development",
+      "version_count": 1,
+      "latest_version": "1.0.0",
+      "has_pdf": false,
+      "has_github": false
+    }
+  ]
+}
